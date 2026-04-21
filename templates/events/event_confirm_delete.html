@@ -1,0 +1,7 @@
+<h2>Видалення</h2>
+<p>Ви впевнені, що хочете видалити "{{ event.name }}"?</p>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Так, видалити</button>
+</form>
+<a href="{% url 'event_list' %}">Скасувати</a>

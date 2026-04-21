@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Список подій</title>
+</head>
+<body>
+    <h1>Актуальні події</h1>
+    <a href="{% url 'event_create' %}">＋ Додати нову подію</a>
+    <hr>
+    <ul>
+        {% for event in events %}
+            <li>
+                <strong>{{ event.name }}</strong> — {{ event.price }} грн.
+                <a href="{% url 'event_update' event.pk %}">Редагувати</a> | 
+                <a href="{% url 'event_delete' event.pk %}" style="color:red;">Видалити</a>
+            </li>
+        {% empty %}
+            <li>Подій поки немає.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
