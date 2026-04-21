@@ -18,5 +18,20 @@
             <li>Подій поки немає.</li>
         {% endfor %}
     </ul>
+    <div style="margin-bottom: 20px; padding: 10px; background-color: #f0f0f0;">
+    {% if user.is_authenticated %}
+        <span>Привіт, <strong>{{ user.username }}</strong>!</span>
+        
+        <form method="POST" action="{% url 'logout' %}" style="display:inline; margin-left: 15px;">
+            {% csrf_token %}
+            <button type="submit">Вийти з акаунта</button>
+        </form>
+        
+    {% else %}
+        <a href="{% url 'login' %}"><button>Увійти</button></a>
+        <a href="{% url 'register' %}"><button>Зареєструватися</button></a>
+    {% endif %}
+</div>
+<hr>
 </body>
 </html>
