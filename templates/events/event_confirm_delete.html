@@ -1,7 +1,21 @@
-<h2>Видалення</h2>
-<p>Ви впевнені, що хочете видалити "{{ event.name }}"?</p>
-<form method="post">
-    {% csrf_token %}
-    <button type="submit">Так, видалити</button>
-</form>
-<a href="{% url 'event_list' %}">Скасувати</a>
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Видалення події</title>
+</head>
+<body>
+    <div style="max-width: 600px; margin: 50px auto; padding: 20px; border: 1px solid #ccc; border-radius: 8px; font-family: sans-serif;">
+        <h1 style="color: #ff4d4d; margin-top: 0;">Видалення події</h1>
+        <p style="font-size: 18px;">Ви впевнені, що хочете видалити подійю <strong>"{{ event.name }}"</strong>?</p>
+
+        <form action="{% url 'event_delete' event.pk %}" method="post" style="margin-top: 20px;">
+            {% csrf_token %}
+            <button type="submit" style="background-color: #ff4d4d; color: white; padding: 10px 20px; border: none; cursor: pointer; border-radius: 4px; font-size: 16px; font-weight: bold;">
+                Так, видалити
+            </button>
+            <a href="{% url 'event_detail' event.pk %}" style="margin-left: 15px; text-decoration: none; color: #555; font-size: 16px;">Скасувати</a>
+        </form>
+    </div>
+</body>
+</html>

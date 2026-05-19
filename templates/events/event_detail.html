@@ -24,11 +24,12 @@
     </p>
     <p><strong>Вільних місць:</strong> {{ free_slots }} (з {{ event.slots_limit }})</p>
 
-    <div style="margin-top: 20px; margin-bottom: 20px;">
-        <a href="{% url 'event_update' event.pk %}"><button>Редагувати подію</button></a>
-        <a href="{% url 'event_delete' event.pk %}" style="margin-left: 10px;"><button style="background-color: #ff4d4d; color: white;">Видалити подію</button></a>
-        
-        <a href="{% url 'toggle_favorite' event.pk %}" style="margin-left: 10px;">
+    {% if user.is_staff %}
+<div style="margin-top: 20px;">
+    <a href="{% url 'event_update' event.pk %}"><button>Редагувати подію</button></a>
+    <a href="{% url 'event_delete' event.pk %}" style="margin-left: 10px;"><button style="background-color: red; color: white;">Видалити подію</button></a>
+</div>
+{% endif %}
             <button>
                 {% if user in event.favorites.all %} ❌ Видалити з обраного {% else %} ⭐ Додати в обране {% endif %}
             </button>

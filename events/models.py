@@ -16,6 +16,10 @@ class Event(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     slots_limit = models.IntegerField(default=50)
     favorites = models.ManyToManyField(User, related_name='favorite_events', blank=True)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+
+    def __str__(self):
+        return self.name
 
     def __str__(self):
         return self.name
