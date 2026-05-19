@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Актуальні події</title>
+</head>
+<body>
+    <div style="background-color: #f0f0f0; padding: 10px; margin-bottom: 20px;">
+        {% if user.is_authenticated %}
+            <span>Привіт, <strong>{{ user.username }}</strong>!</span>
+            <a href="{% url 'my_registrations' %}" style="margin-left: 15px;"><button>Мої реєстрації</button></a>
+<form action="{% url 'logout' %}" method="post" style="display: inline; margin-left: 15px;">
+    {% csrf_token %}
+    <button type="submit">Вийти з акаунта</button>
+</form>І
+        {% else %}
+            <span>Ви увійшли як гість (Анонім)</span>
+            <a href="{% url 'login' %}" style="margin-left: 15px;"><button>Увійти</button></a>
+            <a href="{% url 'register' %}" style="margin-left: 15px;"><button>Зареєструватися</button></a>
+        {% endif %}
+    </div>
+
+    <h1>Актуальні події</h1>
+
+    {% if user.is_authenticated %}
+        <p><a href="{% url 'event_create' %}"><button style="background-color: #4CAF50; color: white; padding: 5px 10px;">+ Додати нову подію</button></a></p>
+    {% endif %}
+
+    <ul>
+        {% for event in events %}
+            <li style="margin-bottom: 15px;">
+                {% if user.is_authenticated %}
+                    <strong><a href="{% url 'event_detail' event.pk %}">{{ event.name }}</a></strong> — {{ event.price }} грн.
+                    <a href="{% url 'event_update' event.pk %}" style="margin-left: 15px;"><button>Редагувати</button></a>
+                    <a href="{% url 'event_delete' event.pk %}" style="margin-left: 5px;"><button style="background-color: #ff4d4d; color: white;">Видаляти</button></a>
+                {% else %}
+                    <strong>{{ event.name }}</strong> — {{ event.price }} грн. <small style="color: #666;">(Увійдіть для перегляду деталей)</small>
+                {% endif %}
+            </li>
+        {% empty %}
+            <li>Подій поки немає.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ event.name }}</title>
+</head>
+<body>
+    <div style="background-color: #f0f0f0; padding: 10px; margin-bottom: 20px;">
+        <span>Привіт, <strong>{{ user.username }}</strong>!</span>
+        <a href="{% url 'my_registrations' %}" style="margin-left: 15px;"><button>Мої реєстрації</button></a>
+        <form action="{% url 'logout' %}" method="post" style="display: inline; margin-left: 15px;">
+            {% csrf_token %}
+            <button type="submit">Вийти з акаунта</button>
+        </form>
+    </div>
+
+    <a href="{% url 'event_list' %}">← Назад до списку подій</a>
+
+    <h1>{{ event.name }}</h1>
+    <p><strong>Категорія:</strong> {{ event.category.name }}</p>
+    <p><strong>Ціна:</strong> {{ event.price }} грн.</p>
+    <p><strong>Статус доступності:</strong> 
+        {% if event.is_available %} Доступна {% else %} Недоступна {% endif %}
+    </p>
+    <p><strong>Вільних місць:</strong> {{ free_slots }} (з {{ event.slots_limit }})</p>
+
+    <div style="margin-top: 20px; margin-bottom: 20px;">
+        <a href="{% url 'event_update' event.pk %}"><button>Редагувати подію</button></a>
+        <a href="{% url 'event_delete' event.pk %}" style="margin-left: 10px;"><button style="background-color: #ff4d4d; color: white;">Видалити подію</button></a>
+        
+        <a href="{% url 'toggle_favorite' event.pk %}" style="margin-left: 10px;">
+            <button>
+                {% if user in event.favorites.all %} ❌ Видалити з обраного {% else %} ⭐ Додати в обране {% endif %}
+            </button>
+        </a>
+    </div>
+
+    <div style="background-color: #e6f7ff; padding: 15px; border-radius: 5px; margin-bottom: 30px;">
+        <h3>Участь у події</h3>
+        {% if is_registered %}
+            <p style="color: green; font-weight: bold;">Ти зареєстрований на цю подію!</p>
+            <a href="{% url 'generate_pdf_ticket' event.pk %}"><button style="background-color: #4CAF50; color: white;">Завантажити PDF квиток</button></a>
+            <a href="{% url 'cancel_registration' event.pk %}" style="margin-left: 10px;"><button>Скасувати реєстрацію</button></a>
+        {% else %}
+            {% if free_slots > 0 %}
+                <a href="{% url 'register_for_event' event.pk %}"><button style="background-color: #008cba; color: white;">Зареєструватися як учасник</button></a>
+            {% else %}
+                <p style="color: red; font-weight: bold;">Вибачте, вільних місць немає.</p>
+            {% endif %}
+        {% endif %}
+    </div>
+
+    <h2>Відгуки та обговорення</h2>
+    <ul>
+        {% for review in reviews %}
+            <li style="margin-bottom: 10px;">
+                <strong>{{ review.user.username }}</strong> <small style="color: #666;">({{ review.created_at }})</small>:<br>
+                {{ review.text }}
+                {% if review.user == user %}
+                    <a href="{% url 'delete_review' review.pk %}" style="margin-left: 10px; color: red;">[Видалити]</a>
+                {% endif %}
+            </li>
+        {% empty %}
+            <li>Відгуків поки немає. Будь першим!</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
