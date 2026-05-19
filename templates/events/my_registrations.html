@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Мої реєстрації</title>
+</head>
+<body>
+    <div style="background-color: #f0f0f0; padding: 10px; margin-bottom: 20px;">
+        <span>Користувач: <strong>{{ user.username }}</strong></span>
+        <a href="{% url 'event_list' %}" style="margin-left: 15px;"><button>Головна сторінка</button></a>
+        <form action="{% url 'logout' %}" method="post" style="display: inline; margin-left: 15px;">
+            {% csrf_token %}
+            <button type="submit">Вийти з акаунта</button>
+        </form>
+    </div>
+
+    <h1>Мої реєстрації на події</h1>
+    <p>Тут відображаються всі події, на які ви успішно зареєструвалися.</p>
+
+    <div style="margin-top: 20px;">
+        {% if registrations %}
+            <table border="1" cellpadding="10" cellspacing="0" style="width: 100%; max-width: 800px; border-collapse: collapse; text-align: left;">
+                <thead>
+                    <tr style="background-color: #eaeaea;">
+                        <th>Назва події</th>
+                        <th>Дії</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for reg in registrations %}
+                        <tr>
+                            <td>
+                                <a href="{% url 'event_detail' reg.event.pk %}" style="color: blue; text-decoration: none; font-weight: bold;">
+                                    {{ reg.event.name }}
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{% url 'generate_pdf_ticket' reg.event.pk %}">
+                                    <button style="background-color: #4CAF50; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 3px;">
+                                        🎫 Завантажити квиток (PDF)
+                                    </button>
+                                </a>
+                                <a href="{% url 'cancel_registration' reg.event.pk %}" style="margin-left: 10px;">
+                                    <button style="background-color: #ff4d4d; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 3px;">
+                                        Скасувати
+                                    </button>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p style="color: #666; font-style: italic;">Ви ще не зареєструвалися на жодну подію.</p>
+            <a href="{% url 'event_list' %}">Переглянути доступні події →</a>
+        {% endif %}
+    </div>
+</body>
+</html>
