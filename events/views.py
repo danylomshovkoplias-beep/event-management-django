@@ -117,3 +117,16 @@ def generate_pdf_ticket(request, pk):
     p.save()
     buffer.seek(0)
     return FileResponse(buffer, as_attachment=True, filename=f"ticket_{event.pk}.pdf")
+
+@login_required
+def add_review(request, pk):
+    event = get_object_or_404(Event, pk=pk)
+    if request.method == 'POST':
+        text = request.POST.get('text', '').strip()
+        if text:
+            Review.objects.create(
+                event=event,
+                user=request.user,
+                text=text
+            )
+    return redirect('event_detail', pk=pk)

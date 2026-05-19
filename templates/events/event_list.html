@@ -12,7 +12,7 @@
 <form action="{% url 'logout' %}" method="post" style="display: inline; margin-left: 15px;">
     {% csrf_token %}
     <button type="submit">Вийти з акаунта</button>
-</form>І
+</form>ІІ
         {% else %}
             <span>Ви увійшли як гість (Анонім)</span>
             <a href="{% url 'login' %}" style="margin-left: 15px;"><button>Увійти</button></a>
